@@ -24,6 +24,8 @@ public class QuizActivity extends AppCompatActivity {
     private Button mNextButton;
     private TextView mQuestionTextView;
 
+    private int numCorrect = 0;
+
     private Question[] mQuestionBank = new Question[]{
             new Question(R.string.question_australia, true),
             new Question(R.string.question_oceans, true),
@@ -70,11 +72,12 @@ public class QuizActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mTrueButton.setEnabled(true);
+                mFalseButton.setEnabled(true);
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
             }
         });
-
         updateQuestion();
     }
 
@@ -118,9 +121,14 @@ public class QuizActivity extends AppCompatActivity {
         Log.d(TAG, "onDestroy() called");
     }
 
+    //TODO Fix so that gradeQuiz is called once the last question is answered
     private void updateQuestion(){
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+
+        if(mCurrentIndex == (mQuestionBank.length - 1)){
+            gradeQuiz(numCorrect);
+        }
     }
 
     private void checkAnswer(boolean userPressedTrue){
@@ -130,10 +138,23 @@ public class QuizActivity extends AppCompatActivity {
 
         if(userPressedTrue == answerIsTrue){
             messageResId = R.string.correct_toast;
+            numCorrect += 1;
         } else {
             messageResId = R.string.incorrect_toast;
         }
 
+        mTrueButton.setEnabled(false);
+        mFalseButton.setEnabled(false);
+
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+
+    }
+
+    //TODO Display the Toast message showing the percentage correct.
+    private void gradeQuiz(int numberCorrect){
+        numCorrect = numberCorrect;
+        float quizPercentage = (100/6 * (numCorrect));
+        Log.d(TAG, "current value: " + quizPercentage);
+//        Toast.makeText(this, quizPercentage, Toast.LENGTH_SHORT);
     }
 }
