@@ -1,11 +1,24 @@
 package com.bignerdranch.android.geoquiz;
 
+import android.icu.lang.UCharacter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+/**
+ * GeoQuiz Challenge Chapters 1 & 2
+ * Chapter 1. Customize Toast messages to appear at the Top of the screen.
+ *
+ * Chapter 2.
+ * 2.1 Add a Listener to the TextView
+ * 2.2 Add a Previous Button
+ * 2.3 Change the Next and Prev Buttons to ImageButtons.
+ */
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -16,7 +29,8 @@ public class QuizActivity extends AppCompatActivity {
      */
     private Button mTrueButton;
     private Button mFalseButton;
-    private Button mNextButton;
+    private ImageButton mPrevButton;
+    private ImageButton mNextButton;
     private TextView mQuestionTextView;
 
     private Question[] mQuestionBank = new Question[]{
@@ -40,6 +54,7 @@ public class QuizActivity extends AppCompatActivity {
 //        get reference to the Buttons
         mTrueButton = findViewById(R.id.true_button);
         mFalseButton = findViewById(R.id.false_button);
+        mPrevButton = findViewById(R.id.prev_button);
         mNextButton = findViewById(R.id.next_button);
 
 //        set the listener for the Buttons
@@ -57,6 +72,40 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
+
+        /*GeoQuiz Challenge from Chapter 2 enable the TextView to be clicked to display the next question*/
+        mQuestionTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                updateQuestion();
+            }
+        });
+
+        /*OnClickListener for the mPrevButton
+        * if at the first question then a Toast is displayed asking that the user presses NEXT button
+        * else if the user is not at the first question the previous question is displayed and update question is called.
+        *
+        */
+        mPrevButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (mCurrentIndex == 0){
+                    int messageResId = 0;
+                    messageResId = R.string.prev_error_msg;
+
+                    Toast toast = Toast.makeText(QuizActivity.this, messageResId, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP, 0, 0);
+                    toast.show();
+
+                } else {
+                    mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
+                    updateQuestion();
+                }
+            }
+        });
+
+
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +113,8 @@ public class QuizActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+
+
 
         updateQuestion();
     }
@@ -84,6 +135,9 @@ public class QuizActivity extends AppCompatActivity {
             messageResId = R.string.incorrect_toast;
         }
 
-        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, messageResId, Toast.LENGTH_SHORT);
+        /*Make Toast appear at top for Challenge from chapter 1*/
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
     }
 }
