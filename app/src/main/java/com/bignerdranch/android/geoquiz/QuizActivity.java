@@ -83,6 +83,7 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
+        //TODO Make it so that the cheat result is saved even if they press next until the question comes back around
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +117,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
+    //TODO Do not clear out cheat result when QuizActivity is rotated
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
