@@ -12,6 +12,10 @@ import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+//TODO Create a TextView that displays the build version
+
+//TODO Limit the number of cheats to 3 , disable the cheat button after the third cheat.
+
 public class CheatActivity extends AppCompatActivity {
 
     private static final String EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true";
